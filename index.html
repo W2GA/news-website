@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الأخبار - رؤى الأخبار</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --midnight-blue: #0a192f;
+      --dark-blue: #112240;
+      --slate: #8892b0;
+      --light-slate: #a8b2d1;
+      --lightest-slate: #ccd6f6;
+      --accent: #64ffda;
+      --white: #e6f1ff;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Calibre', 'Inter', 'San Francisco', 'SF Pro Text', -apple-system, system-ui, sans-serif;
+      background-color: var(--midnight-blue);
+      color: var(--light-slate);
+      line-height: 1.6;
+      padding: 0;
+      min-height: 100vh;
+      direction: rtl; /* لتنسيق النص من اليمين إلى اليسار */
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-left: 0.5rem; /* بدل margin-right للـ RTL */
+    }
+    
+    .page-title {
+      color: var(--white);
+      font-size: 2.5rem;
+      text-align: center;
+      margin: 2rem 0;
+      font-weight: 700;
+    }
+    
+    #newsContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .news-card {
+      background-color: var(--dark-blue);
+      border-radius: 10px;
+      overflow: hidden;
+      width: 350px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+    }
+    
+    .news-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 20px 30px -15px rgba(2, 12, 27, 0.7);
+    }
+    
+    .news-card a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      height: 100%;
+    }
+    
+    .news-image {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .news-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .news-card:hover .news-image img {
+      transform: scale(1.05);
+    }
+    
+    .news-content {
+      padding: 1.5rem;
+    }
+    
+    .news-content h2 {
+      font-size: 1.4rem;
+      margin: 0 0 12px;
+      color: var(--white);
+      line-height: 1.4;
+    }
+    
+    .news-content p {
+      font-size: 1rem;
+      color: var(--light-slate);
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    
+    .news-date {
+      color: var(--accent);
+      font-size: 0.85rem;
+      display: block;
+      margin-top: 10px;
+    }
+    
+    .read-more {
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    .read-more i {
+      margin-right: 5px; /* بدل margin-left للـ RTL */
+      transition: transform 0.3s ease;
+    }
+    
+    .news-card:hover .read-more i {
+      transform: translateX(-3px); /* عكس الاتجاه للـ RTL */
+    }
+    
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 50vh;
+      color: var(--accent);
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(100, 255, 218, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--accent);
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 1rem;
+    }
+    
+    .error-message {
+      background: rgba(255, 100, 100, 0.1);
+      border: 1px solid rgba(255, 100, 100, 0.3);
+      color: #ff6464;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      margin: 2rem 0;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: 4rem;
+      border-top: 1px solid rgba(100, 255, 218, 0.1);
+      color: var(--slate);
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+      }
+      
+      #newsContainer {
+        gap: 20px;
+      }
+      
+      .news-card {
+        width: 100%;
+        max-width: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="#" class="logo"><i class="fas fa-newspaper"></i> رؤى الأخبار</a>
+    </header>
+    
+    <h1 class="page-title">أحدث الأخبار</h1>
+    
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>جارٍ تحميل الأخبار...</p>
+    </div>
+    
+    <div id="newsContainer"></div>
+    
+    <footer>
+      <p>&copy; 2023 رؤى الأخبار - جميع الحقوق محفوظة</p>
+    </footer>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        fetch('api.php')
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('loading').style.display = 'none';
+            const container = document.getElementById('newsContainer');
+
+            if (data.status === 'success') {
+              let html = '';
+              data.data.forEach(news => {
+                html += `
+                  <div class="news-card">
+                    <a href="news.html?id=${news.id}">
+                      <div class="news-image">
+                        <img src="${news.image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" alt="${news.headline}">
+                      </div>
+                      <div class="news-content">
+                        <h2>${news.headline}</h2>
+                        <p>${news.content ? news.content.substring(0, 100) + '...' : 'لا يوجد محتوى متاح'}</p>
+                        <span class="read-more">اقرأ المزيد <i class="fas fa-arrow-right"></i></span>
+                      </div>
+                    </a>
+                  </div>
+                `;
+              });
+              container.innerHTML = html;
+            } else {
+              container.innerHTML = `
+                <div class="error-message">
+                  <i class="fas fa-exclamation-circle"></i>
+                  <p>خطأ: ${data.message || "لا يمكن تحميل الأخبار"}</p>
+                </div>
+              `;
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('newsContainer').innerHTML = `
+              <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>حدث خطأ أثناء جلب الأخبار. يرجى المحاولة لاحقًا.</p>
+              </div>
+            `;
+          });
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
